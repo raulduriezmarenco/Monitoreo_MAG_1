@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+       
+        <title></title>
+    </head>
+    <body>
+
+        <div id="general">
+        
+        <div>
+                <style>
+                    #map {
+                        width: 800x;
+                        height: 600px;
+                    }
+                </style>
+        </div>
+
+        <div>
+
+            <h1>MINISTERIO AGROPECUARIO</h1>            
+        </div>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/LIMITESDEPARTAMENTALES_2.js"></script>
+        <script src="data/ESTADODEESTANQUESDEPECES_3.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[11.209814941965607,-87.95412572668069],[13.540783393559831,-84.07244914839242]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'feet',
+            secondaryLengthUnit: 'miles',
+            primaryAreaUnit: 'sqfeet',
+            secondaryAreaUnit: 'sqmiles'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GooglecnSatellite_0');
+        map.getPane('pane_GooglecnSatellite_0').style.zIndex = 400;
+        var layer_GooglecnSatellite_0 = L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+            pane: 'pane_GooglecnSatellite_0',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.com/intl/zh-CN_cn/permissions/geoguidelines/attr-guide.html">地图数据 ©2016 Google</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 21
+        });
+        layer_GooglecnSatellite_0;
+        map.addLayer(layer_GooglecnSatellite_0);
+        map.createPane('pane_OpenTopoMap_1');
+        map.getPane('pane_OpenTopoMap_1').style.zIndex = 401;
+        var layer_OpenTopoMap_1 = L.tileLayer('https://a.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_OpenTopoMap_1',
+            opacity: 1.0,
+            attribution: '<a href="https://www.openstreetmap.org/copyright">Kartendaten: © OpenStreetMap-Mitwirkende, SRTM | Kartendarstellung: © OpenTopoMap (CC-BY-SA)</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 18
+        });
+        layer_OpenTopoMap_1;
+        map.addLayer(layer_OpenTopoMap_1);
+        function pop_LIMITESDEPARTAMENTALES_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['AREA'] !== null ? autolinker.link(feature.properties['AREA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PERIMETER'] !== null ? autolinker.link(feature.properties['PERIMETER'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOMBRE'] !== null ? autolinker.link(feature.properties['NOMBRE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CLASIFICAD'] !== null ? autolinker.link(feature.properties['CLASIFICAD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['HECTARES'] !== null ? autolinker.link(feature.properties['HECTARES'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COD_DPTO'] !== null ? autolinker.link(feature.properties['COD_DPTO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COD_MUNIC'] !== null ? autolinker.link(feature.properties['COD_MUNIC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['N_MUNICIPI'] !== null ? autolinker.link(feature.properties['N_MUNICIPI'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['KM2'] !== null ? autolinker.link(feature.properties['KM2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CABECERA_D'] !== null ? autolinker.link(feature.properties['CABECERA_D'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NOM_DPTO</th>\
+                        <td>' + (feature.properties['NOM_DPTO'] !== null ? autolinker.link(feature.properties['NOM_DPTO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Mz'] !== null ? autolinker.link(feature.properties['Mz'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Km2_1'] !== null ? autolinker.link(feature.properties['Km2_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['KM'] !== null ? autolinker.link(feature.properties['KM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOM_DEP'] !== null ? autolinker.link(feature.properties['NOM_DEP'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MUNIC_ID'] !== null ? autolinker.link(feature.properties['MUNIC_ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['N_MUNIC'] !== null ? autolinker.link(feature.properties['N_MUNIC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['AREA_2'] !== null ? autolinker.link(feature.properties['AREA_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['N_DEPTO'] !== null ? autolinker.link(feature.properties['N_DEPTO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DEPTO_COD'] !== null ? autolinker.link(feature.properties['DEPTO_COD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MUNIC_COD'] !== null ? autolinker.link(feature.properties['MUNIC_COD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MUNICIPIO'] !== null ? autolinker.link(feature.properties['MUNICIPIO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['N_MUNICI_1'] !== null ? autolinker.link(feature.properties['N_MUNICI_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CODI_MUNIC'] !== null ? autolinker.link(feature.properties['CODI_MUNIC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UNI1name'] !== null ? autolinker.link(feature.properties['UNI1name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UNI1Estado'] !== null ? autolinker.link(feature.properties['UNI1Estado'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UNI1coordX'] !== null ? autolinker.link(feature.properties['UNI1coordX'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UNI1coordY'] !== null ? autolinker.link(feature.properties['UNI1coordY'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UNI1T/Peces'] !== null ? autolinker.link(feature.properties['UNI1T/Peces'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UNI1N_MUNIC'] !== null ? autolinker.link(feature.properties['UNI1N_MUNIC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UNI1N_DEPTO'] !== null ? autolinker.link(feature.properties['UNI1N_DEPTO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_LIMITESDEPARTAMENTALES_2_0() {
+            return {
+                pane: 'pane_LIMITESDEPARTAMENTALES_2',
+                opacity: 1,
+                color: 'rgba(139,184,46,0.7)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_LIMITESDEPARTAMENTALES_2');
+        map.getPane('pane_LIMITESDEPARTAMENTALES_2').style.zIndex = 402;
+        map.getPane('pane_LIMITESDEPARTAMENTALES_2').style['mix-blend-mode'] = 'normal';
+        var layer_LIMITESDEPARTAMENTALES_2 = new L.geoJson(json_LIMITESDEPARTAMENTALES_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_LIMITESDEPARTAMENTALES_2',
+            layerName: 'layer_LIMITESDEPARTAMENTALES_2',
+            pane: 'pane_LIMITESDEPARTAMENTALES_2',
+            onEachFeature: pop_LIMITESDEPARTAMENTALES_2,
+            style: style_LIMITESDEPARTAMENTALES_2_0,
+        });
+        bounds_group.addLayer(layer_LIMITESDEPARTAMENTALES_2);
+        map.addLayer(layer_LIMITESDEPARTAMENTALES_2);
+        function pop_ESTADODEESTANQUESDEPECES_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">CODIGO</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Estado</th>\
+                        <td>' + (feature.properties['Estado'] !== null ? autolinker.link(feature.properties['Estado'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">coordX</th>\
+                        <td>' + (feature.properties['coordX'] !== null ? autolinker.link(feature.properties['coordX'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">coordY</th>\
+                        <td>' + (feature.properties['coordY'] !== null ? autolinker.link(feature.properties['coordY'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">T/Peces</th>\
+                        <td>' + (feature.properties['T/Peces'] !== null ? autolinker.link(feature.properties['T/Peces'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                         <th scope="row">MUNICIPIO</th>\
+                        <td colspan="2">' + (feature.properties['N_MUNIC'] !== null ? autolinker.link(feature.properties['N_MUNIC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">DEPARTAMENTO</th>\
+                        <td>' + (feature.properties['N_DEPTO'] !== null ? autolinker.link(feature.properties['N_DEPTO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                    <td colspan="2">' + (feature.properties['NOMBRE'] !== null ? autolinker.link(feature.properties['NOMBRE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MUNIC_ID'] !== null ? autolinker.link(feature.properties['MUNIC_ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['N_MUNIC_2'] !== null ? autolinker.link(feature.properties['N_MUNIC_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['AREA'] !== null ? autolinker.link(feature.properties['AREA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['N_DEPTO_2'] !== null ? autolinker.link(feature.properties['N_DEPTO_2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DEPTO_COD'] !== null ? autolinker.link(feature.properties['DEPTO_COD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MUNIC_COD'] !== null ? autolinker.link(feature.properties['MUNIC_COD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MUNICIPIO'] !== null ? autolinker.link(feature.properties['MUNICIPIO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['N_MUNICIPI'] !== null ? autolinker.link(feature.properties['N_MUNICIPI'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CODI_MUNIC'] !== null ? autolinker.link(feature.properties['CODI_MUNIC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['cant_est'] !== null ? autolinker.link(feature.properties['cant_est'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['cantXDpto'] !== null ? autolinker.link(feature.properties['cantXDpto'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ESTADODEESTANQUESDEPECES_3_0() {
+            return {
+                pane: 'pane_ESTADODEESTANQUESDEPECES_3',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+            icon: L.icon({
+            iconUrl: 'markers/fish.svg',
+            iconSize: [22.04, 22.04]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ESTADODEESTANQUESDEPECES_3');
+        map.getPane('pane_ESTADODEESTANQUESDEPECES_3').style.zIndex = 403;
+        map.getPane('pane_ESTADODEESTANQUESDEPECES_3').style['mix-blend-mode'] = 'normal';
+        var layer_ESTADODEESTANQUESDEPECES_3 = new L.geoJson(json_ESTADODEESTANQUESDEPECES_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ESTADODEESTANQUESDEPECES_3',
+            layerName: 'layer_ESTADODEESTANQUESDEPECES_3',
+            pane: 'pane_ESTADODEESTANQUESDEPECES_3',
+            onEachFeature: pop_ESTADODEESTANQUESDEPECES_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_ESTADODEESTANQUESDEPECES_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_ESTADODEESTANQUESDEPECES_3);
+        map.addLayer(layer_ESTADODEESTANQUESDEPECES_3);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/ESTADODEESTANQUESDEPECES_3.png" /> ESTADO DE ESTANQUES DE PECES': layer_ESTADODEESTANQUESDEPECES_3,'<img src="legend/LIMITESDEPARTAMENTALES_2.png" /> LIMITES DEPARTAMENTALES': layer_LIMITESDEPARTAMENTALES_2,"OpenTopoMap": layer_OpenTopoMap_1,"Google.cn Satellite": layer_GooglecnSatellite_0,}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_ESTADODEESTANQUESDEPECES_3,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'name'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"N_DEPTO": "str","Estado": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_N_DEPTO = document.createElement('div');
+            div_N_DEPTO.id = "div_N_DEPTO";
+            div_N_DEPTO.className= "filterselect";
+            document.getElementById("menu").appendChild(div_N_DEPTO);
+            sel_N_DEPTO = document.createElement('select');
+            sel_N_DEPTO.multiple = true;
+            sel_N_DEPTO.size = 5;
+            sel_N_DEPTO.id = "sel_N_DEPTO";
+            var N_DEPTO_options_str = "<option value='' unselected></option>";
+            sel_N_DEPTO.onchange = function(){filterFunc()};
+            N_DEPTO_options_str  += '<option value="Boaco">Boaco</option>';
+            N_DEPTO_options_str  += '<option value="Carazo">Carazo</option>';
+            N_DEPTO_options_str  += '<option value="Chinandega">Chinandega</option>';
+            N_DEPTO_options_str  += '<option value="Chontales">Chontales</option>';
+            N_DEPTO_options_str  += '<option value="Esteli">Esteli</option>';
+            N_DEPTO_options_str  += '<option value="Granada">Granada</option>';
+            N_DEPTO_options_str  += '<option value="Jinotega">Jinotega</option>';
+            N_DEPTO_options_str  += '<option value="Leon">Leon</option>';
+            N_DEPTO_options_str  += '<option value="Madriz">Madriz</option>';
+            N_DEPTO_options_str  += '<option value="Managua">Managua</option>';
+            N_DEPTO_options_str  += '<option value="Masaya">Masaya</option>';
+            N_DEPTO_options_str  += '<option value="Matagalpa">Matagalpa</option>';
+            N_DEPTO_options_str  += '<option value="Nueva Segovia">Nueva Segovia</option>';
+            N_DEPTO_options_str  += '<option value="RAAN">RAAN</option>';
+            N_DEPTO_options_str  += '<option value="RAAS">RAAS</option>';
+            N_DEPTO_options_str  += '<option value="Rio San Juan">Rio San Juan</option>';
+            N_DEPTO_options_str  += '<option value="Rivas">Rivas</option>';
+
+            sel_N_DEPTO.innerHTML = N_DEPTO_options_str;
+            div_N_DEPTO.appendChild(sel_N_DEPTO);
+            var lab_N_DEPTO = document.createElement('div');
+            lab_N_DEPTO.innerHTML = 'NOMBRE DEL DEPARTAMENTO';
+            lab_N_DEPTO.className = 'filterlabel';
+            div_N_DEPTO.appendChild(lab_N_DEPTO);
+            var reset_N_DEPTO = document.createElement('div');
+            reset_N_DEPTO.innerHTML = 'clear filter';
+            reset_N_DEPTO.className = 'filterlabel';
+            reset_N_DEPTO.onclick = function() {
+                var options = document.getElementById("sel_N_DEPTO").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_N_DEPTO.appendChild(reset_N_DEPTO);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Estado = document.createElement('div');
+            div_Estado.id = "div_Estado";
+            div_Estado.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Estado);
+            sel_Estado = document.createElement('select');
+            sel_Estado.multiple = true;
+            sel_Estado.size = 3;
+            sel_Estado.id = "sel_Estado";
+            var Estado_options_str = "<option value='' unselected></option>";
+            sel_Estado.onchange = function(){filterFunc()};
+            Estado_options_str  += '<option value="ACTIVO">ACTIVO</option>';
+            Estado_options_str  += '<option value="INACTIVO">INACTIVO</option>';
+            sel_Estado.innerHTML = Estado_options_str;
+            div_Estado.appendChild(sel_Estado);
+            var lab_Estado = document.createElement('div');
+            lab_Estado.innerHTML = 'Estado';
+            lab_Estado.className = 'filterlabel';
+            div_Estado.appendChild(lab_Estado);
+            var reset_Estado = document.createElement('div');
+            reset_Estado.innerHTML = 'clear filter';
+            reset_Estado.className = 'filterlabel';
+            reset_Estado.onclick = function() {
+                var options = document.getElementById("sel_Estado").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Estado.appendChild(reset_Estado);
+        </script>
+
+        </div>
+    </body>
+</html>
